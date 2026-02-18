@@ -28,7 +28,7 @@ private final class UEMDataProvider: NSObject, WS1UEMDataDelegate {
 ///
 /// Owns all pre-init configuration mirrors (editable only before `enableSDK()` is called)
 /// and all post-init runtime state.
-/// IInjected into the SwiftUI environment from the app entry point so every view can read the same shared instance.
+/// Injected into the SwiftUI environment from the app entry point so every view can read the same shared instance.
 ///
 @Observable
 final class IntelSDKManager {
