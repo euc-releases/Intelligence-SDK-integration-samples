@@ -77,7 +77,7 @@ extension DashboardView {
             }
 
             // Device UUID with copy button
-            LabeledContent("Device UUID") {
+            LabeledContent("SDK User UUID") {
                 HStack(spacing: 8) {
                     Text(self.manager.userUUID.isEmpty ? "Unavailable" : self.manager.userUUID)
                         .font(.caption.monospaced())
@@ -96,19 +96,6 @@ extension DashboardView {
                 }
             }
 
-            // Crash on last load indicator
-            LabeledContent("Last Session") {
-                if self.manager.crashedOnLastLoad {
-                    Label("Crashed", systemImage: "exclamationmark.triangle.fill")
-                        .foregroundStyle(.red)
-                        .font(.subheadline)
-                } else {
-                    Label("Clean exit", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                        .font(.subheadline)
-                }
-            }
-
             // App ID (read-only)
             LabeledContent("App ID") {
                 HStack(spacing: 4) {
@@ -123,6 +110,19 @@ extension DashboardView {
                 }
             }
 
+            // Crash on last load indicator
+            LabeledContent("Last Session") {
+                if self.manager.crashedOnLastLoad {
+                    Text("Crashed")
+                        .foregroundStyle(.red)
+                        .font(.subheadline)
+                } else {
+                    Text("Clean Exit")
+                        .foregroundStyle(.green)
+                        .font(.subheadline)
+
+                }
+            }
         } header: {
             SectionHeaderView(
                 title: "SDK Status",

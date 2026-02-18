@@ -28,7 +28,7 @@ private final class UEMDataProvider: NSObject, WS1UEMDataDelegate {
 ///
 /// Owns all pre-init configuration mirrors (editable only before `enableSDK()` is called)
 /// and all post-init runtime state.
-/// IInjected into the SwiftUI environment from the app entry point so every view can read the same shared instance.
+/// Injected into the SwiftUI environment from the app entry point so every view can read the same shared instance.
 ///
 @Observable
 final class IntelSDKManager {
@@ -93,7 +93,7 @@ final class IntelSDKManager {
 
     // MARK: UEM Delegate Fields (Pre-Init)
     // These values populate the WS1UEMDataDelegate before enableSDK() is called.
-    // -> These details can be populated post `enableSDK()` as well but the delegate my be registered pre-enableSDK()
+    // -> These details can be populated post `enableSDK()` as well but the delegate should be registered pre-enableSDK()
     // They publish device-level UEM attributes (serial number, UDID, username) to the
     // Intelligence backend for enriched device identity. In a real UEM-managed deployment
     // these would come from NSUserDefaults/ManagedAppConfig; here they are entered manually.
@@ -121,7 +121,7 @@ final class IntelSDKManager {
 
     /// Current SDK logging verbosity level. Can be changed at any time after init.
     /// Defaults to .warning; the Dashboard exposes a picker to change this live.
-    var loggingLevel: WS1IntelligenceLoggingLevel = .debug
+    var loggingLevel: WS1IntelligenceLoggingLevel = .warning
 
     // MARK: Private
 
@@ -144,6 +144,10 @@ final class IntelSDKManager {
     func enableSDK() -> String? {
         guard !self.appID.trimmingCharacters(in: .whitespaces).isEmpty else {
             return "App ID is required. Enter your Intelligence App ID and try again."
+        }
+
+        guard self.isInitialized == false else {
+            return "SDK is already initialized!"
         }
 
         // WS1Config.default()
