@@ -1,0 +1,24 @@
+{
+  "originHash" : "4c6e09f6a6bbb2b56b807f0f0c271553f7913c26df0a6c9f7409ab9e11991718",
+  "pins" : [
+    {
+      "identity" : "ws1-crypto-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/euc-releases/ws1-crypto-sdk.git",
+      "state" : {
+        "revision" : "04b73f9b30ae0868fe5cbe30def0510c58771d04",
+        "version" : "25.6.0"
+      }
+    },
+    {
+      "identity" : "ws1-intelligencesdk-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/euc-releases/ws1-intelligencesdk-sdk-ios",
+      "state" : {
+        "revision" : "8689fd7eee959e5c343a4bfe55676ab5a6371935",
+        "version" : "25.11.0"
+      }
+    }
+  ],
+  "version" : 3
+}
