@@ -117,6 +117,19 @@ final class IntelSDKManager {
     /// Populated after initialization by reading WS1Intelligence.didCrashOnLastLoad().
     var crashedOnLastLoad: Bool = false
 
+    /// The name of the crash recorded in the previous session (e.g. "SIGABRT", "EXC_BAD_ACCESS").
+    /// Populated by the WS1NotificationDidCrashOnLastLoad notification observer registered in init().
+    /// Nil if the app did not crash on the last load or the notification has not yet fired.
+    var lastCrashName: String?
+
+    /// A human-readable description of why the crash occurred.
+    /// Populated by the WS1NotificationDidCrashOnLastLoad notification observer registered in init().
+    var lastCrashReason: String?
+
+    /// The date/time string of when the crash occurred, as reported by the SDK.
+    /// Populated by the WS1NotificationDidCrashOnLastLoad notification observer registered in init().
+    var lastCrashDate: String?
+
     // MARK: Post-Init Mutable Settings
 
     /// Current SDK logging verbosity level. Can be changed at any time after init.
@@ -128,6 +141,38 @@ final class IntelSDKManager {
     // Strong reference to the UEM delegate provider. Must outlive the enable() call
     // because the SDK holds a weak reference to the delegate internally.
     private var _uemProvider: UEMDataProvider?
+
+    // Retained token for the WS1NotificationDidCrashOnLastLoad observer.
+    // Registered in init() — before enableSDK() is called — so the notification cannot
+    // fire and be missed in a race between enable() and observer registration.
+    private var _crashObserver: NSObjectProtocol?
+
+    // MARK: Initialization
+
+    init() {
+        // NotificationCenter.default.addObserver(forName: .WS1NotificationDidCrashOnLastLoad, ...)
+        // The SDK posts WS1NotificationDidCrashOnLastLoad on the main queue during the enable()
+        // call if it detects that the app crashed in the previous session. The notification's
+        // userInfo carries the crash name, reason, and date string, providing richer context
+        // than didCrashOnLastLoad() alone.
+        // NOTE - Crash reason can either be a reason or crash code.
+        //
+        // We register this observer here — in init() — rather than inside enableSDK(), because
+        // the notification can fire synchronously during enable(). Registering after the enable()
+        // call would create a race condition where the notification fires before the handler is
+        // in place, resulting in the crash details never being captured.
+        //
+        // Constraint: The observer fires at most once per app session. The retained token in
+        // _crashObserver keeps the block alive for the duration of the session.
+        self._crashObserver = NotificationCenter.default.addObserver(
+            forName: Notification.Name(WS1NotificationDidCrashOnLastLoad),
+            object: nil,
+            queue: .main) { [weak self] notification in
+                self?.lastCrashName   = notification.userInfo?[WS1NotificationCrashNameKey]   as? String
+                self?.lastCrashReason = notification.userInfo?[WS1NotificationCrashReasonKey] as? String
+                self?.lastCrashDate   = notification.userInfo?[WS1NotificationCrashDateKey]   as? String
+        }
+    }
 
     // MARK: SDK Initialization
 

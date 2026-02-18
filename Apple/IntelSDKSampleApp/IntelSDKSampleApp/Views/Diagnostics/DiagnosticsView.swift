@@ -10,7 +10,8 @@ import SwiftUI
 
 /// Top-level container for the Diagnostics tab.
 ///
-/// Hosts the Crash Reporting, Breadcrumbs, and Error Logging sub-features
+/// Acts as a navigation hub for the three Diagnostics sub-features:
+/// Crash Reporting, Breadcrumbs, and Error & Exception Logging.
 /// Shows a "not initialized" gate screen when the SDK has not yet been enabled.
 struct DiagnosticsView: View {
 
@@ -19,12 +20,40 @@ struct DiagnosticsView: View {
     var body: some View {
         NavigationStack {
             if self.manager.isInitialized {
+                List {
+                    Section {
+                        NavigationLink {
+                            CrashReportingView()
+                        } label: {
+                            Label("Crash Reporting", systemImage: "exclamationmark.triangle")
+                        }
 
-                SDKFeatureComingSoonView(
-                    featureName: "Diagnostics",
-                    featureDescription: "Crash reporting, breadcrumbs, and error & exception logging.",
-                    systemImage: "cross.case"
-                )
+                        NavigationLink {
+                            BreadcrumbsView()
+                        } label: {
+                            Label("Breadcrumbs", systemImage: "bookmark")
+                        }
+
+                        NavigationLink {
+                            SDKFeatureComingSoonView(
+                                featureName: "Error & Exception Logging",
+                                featureDescription: "Log NSError and NSException instances for visibility in the Intelligence portal.",
+                                systemImage: "xmark.octagon"
+                            )
+                            .navigationTitle("Error & Exception Logging")
+                            .navigationBarTitleDisplayMode(.inline)
+                        } label: {
+                            Label("Error & Exception Logging", systemImage: "xmark.octagon")
+                        }
+                    } header: {
+                        SectionHeaderView(
+                            title: "Diagnostics Features",
+                            systemImage: "cross.case",
+                            description: "Crash reporting, breadcrumbs, and error & exception logging."
+                        )
+                    }
+                }
+                .listStyle(.insetGrouped)
                 .navigationTitle("Diagnostics")
             } else {
                 SDKNotInitializedView()
