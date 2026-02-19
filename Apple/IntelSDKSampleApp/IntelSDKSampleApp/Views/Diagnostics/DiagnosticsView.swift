@@ -35,13 +35,7 @@ struct DiagnosticsView: View {
                         }
 
                         NavigationLink {
-                            SDKFeatureComingSoonView(
-                                featureName: "Error & Exception Logging",
-                                featureDescription: "Log NSError and NSException instances for visibility in the Intelligence portal.",
-                                systemImage: "xmark.octagon"
-                            )
-                            .navigationTitle("Error & Exception Logging")
-                            .navigationBarTitleDisplayMode(.inline)
+                            ErrorLoggingView()
                         } label: {
                             Label("Error & Exception Logging", systemImage: "xmark.octagon")
                         }

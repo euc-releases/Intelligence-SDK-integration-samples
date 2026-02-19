@@ -10,7 +10,8 @@ import SwiftUI
 
 /// Top-level container for the Performance tab.
 ///
-/// Hosts the User Flows and Network Insights sub-features
+/// Acts as a navigation hub for the two Performance sub-features:
+/// User Flows and Network Insights (APM).
 /// Shows a "not initialized" gate screen when the SDK has not yet been enabled.
 struct PerformanceView: View {
 
@@ -19,12 +20,34 @@ struct PerformanceView: View {
     var body: some View {
         NavigationStack {
             if self.manager.isInitialized {
+                List {
+                    Section {
+                        NavigationLink {
+                            UserFlowsView()
+                        } label: {
+                            Label("User Flows", systemImage: "arrow.trianglehead.2.clockwise.rotate.90")
+                        }
 
-                SDKFeatureComingSoonView(
-                    featureName: "Performance",
-                    featureDescription: "User flow tracking and network request monitoring (APM).",
-                    systemImage: "chart.xyaxis.line"
-                )
+                        NavigationLink(destination: {
+                            SDKFeatureComingSoonView(
+                                featureName: "Network Insights",
+                                featureDescription: "Automatic and manual network request monitoring (APM).",
+                                systemImage: "network"
+                            )
+                            .navigationTitle("Network Insights")
+                            .navigationBarTitleDisplayMode(.inline)
+                        }, label: {
+                            Label("Network Insights", systemImage: "network")
+                        })
+                    } header: {
+                        SectionHeaderView(
+                            title: "Performance Features",
+                            systemImage: "chart.xyaxis.line",
+                            description: "User flow tracking and network request monitoring (APM)."
+                        )
+                    }
+                }
+                .listStyle(.insetGrouped)
                 .navigationTitle("Performance")
             } else {
                 SDKNotInitializedView()
