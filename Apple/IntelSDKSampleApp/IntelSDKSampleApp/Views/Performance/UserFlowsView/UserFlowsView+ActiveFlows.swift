@@ -106,6 +106,13 @@ extension UserFlowsView {
                     .background(Color.blue.opacity(0.12), in: Capsule())
             }
             .padding(.vertical, 4)
+            .onAppear {
+                if let timeout = flow.timeout {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
+                        self.timeoutFlow(flow)
+                    }
+                }
+            }
 
             // Action buttons: End / Fail / Cancel
             HStack(spacing: 12) {

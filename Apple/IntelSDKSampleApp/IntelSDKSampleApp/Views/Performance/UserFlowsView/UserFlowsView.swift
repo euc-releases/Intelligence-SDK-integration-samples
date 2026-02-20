@@ -11,13 +11,14 @@ import WS1IntelligenceSDK
 
 // MARK: - Supporting Types
 
+
 /// The terminal state a user flow can reach after it has been started.
 enum UserFlowStatus: String {
     case running   = "Running"
     case ended     = "Ended"
     case failed    = "Failed"
     case cancelled = "Cancelled"
-    // TODO: need to add timeout
+    case timeout   = "TimeOut"
 
     var systemImage: String {
         switch self {
@@ -25,6 +26,7 @@ enum UserFlowStatus: String {
         case .ended:     return "checkmark.circle.fill"
         case .failed:    return "xmark.circle.fill"
         case .cancelled: return "minus.circle.fill"
+        case .timeout:   return "clock.badge.exclamationmark"
         }
     }
 
@@ -34,6 +36,7 @@ enum UserFlowStatus: String {
         case .ended:     return .green
         case .failed:    return .orange
         case .cancelled: return .secondary
+        case .timeout:   return .yellow
         }
     }
 }

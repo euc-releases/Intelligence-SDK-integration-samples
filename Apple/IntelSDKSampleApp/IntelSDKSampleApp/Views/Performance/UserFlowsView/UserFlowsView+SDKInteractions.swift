@@ -19,7 +19,15 @@ extension UserFlowsView {
     /// Records the new entry in local state.
     func beginFlow(name: String, timeoutText: String) {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return }
+
+        guard !trimmed.isEmpty else {
+            return
+        }
+
+        guard !self.flows.contains(where: { $0.name == name && $0.status == .running }) else {
+            self.presentToast("Flow with name: \(name) is already running!")
+            return
+        }
 
         let timeout = Double(timeoutText.trimmingCharacters(in: .whitespacesAndNewlines))
 
@@ -47,12 +55,7 @@ extension UserFlowsView {
             WS1Intelligence.beginUserFlow(trimmed)
         }
 
-        let entry = UserFlowEntry(
-            name: trimmed,
-            status: .running,
-            startedAt: Date(),
-            timeout: timeout
-        )
+        let entry = UserFlowEntry(name: trimmed, status: .running, startedAt: Date(), timeout: timeout)
         self.flows.append(entry)
         self.breadcrumbInputs[entry.id] = ""
         self.presentToast("Flow \"\(trimmed)\" started")
@@ -98,6 +101,12 @@ extension UserFlowsView {
         WS1Intelligence.cancelUserFlow(flow.name)
         self.completeFlow(id: flow.id, status: .cancelled)
         self.presentToast("Flow \"\(flow.name)\" cancelled")
+    }
+
+    func timeoutFlow(_ flow: UserFlowEntry) {
+        // a timed out user-flow is automatically handled by the SDK.
+        // Developers need not call an explicit IntelligenceSDK API for user-flow time-outs.
+        self.completeFlow(id: flow.id, status: .timeout)
     }
 
     /// Transitions the flow with the given id to a terminal status and records completion time.
