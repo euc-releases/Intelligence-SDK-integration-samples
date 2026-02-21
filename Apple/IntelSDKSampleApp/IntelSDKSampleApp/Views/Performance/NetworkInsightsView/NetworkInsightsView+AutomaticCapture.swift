@@ -16,11 +16,11 @@ extension NetworkInsightsView {
 
     var automaticCaptureSection: some View {
         Section {
-            self.infoRow(
+            InfoRowView(
                 icon: "wand.and.stars",
                 color: .blue,
                 title: "Automatic Capture",
-                body: "When service monitoring is enabled, the SDK automatically captures all NSURLSession and NSURLConnection network requests made by the app. No manual logging is needed for these."
+                infoBody: "When service monitoring is enabled, the SDK automatically captures all NSURLSession and NSURLConnection network requests made by the app. No manual logging is needed for these."
             )
 
             HStack(alignment: .top, spacing: 12) {
@@ -79,7 +79,7 @@ extension NetworkInsightsView {
             .disabled(self.isFiringSuccess || self.isFiringFailure)
             .foregroundStyle(.orange)
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 // Use completion-handler form — SDK captures this automatically.
                 // ⚠️ async/await URLSession APIs are NOT captured automatically.
                 URLSession.shared.dataTask(with: url) { data, response, error in

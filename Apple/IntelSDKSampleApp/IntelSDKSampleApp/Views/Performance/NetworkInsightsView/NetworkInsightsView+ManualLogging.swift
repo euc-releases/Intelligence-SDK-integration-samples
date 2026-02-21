@@ -17,11 +17,11 @@ extension NetworkInsightsView {
 
     var manualLoggingSection: some View {
         Section {
-            self.infoRow(
+            InfoRowView(
                 icon: "square.and.pencil",
                 color: .purple,
                 title: "When to Use Manual Logging",
-                body: "Use manual logging for network libraries that do not use NSURLSession or NSURLConnection — for example, custom socket code, gRPC, or third-party frameworks that bypass the standard URL loading system."
+                infoBody: "Use manual logging for network libraries that do not use NSURLSession or NSURLConnection — for example, custom socket code, gRPC, or third-party frameworks that bypass the standard URL loading system."
             )
 
             Picker("HTTP Method", selection: self.$manualMethod) {
@@ -96,7 +96,7 @@ extension NetworkInsightsView {
             }
             .disabled(self.manualURL.trimmingCharacters(in: .whitespaces).isEmpty)
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 // WS1Intelligence.logNetworkRequest(method:urlString:latency:bytesRead:bytesSent:responseCode:error:)
                 // latency is a TimeInterval (seconds) — convert from ms.
                 WS1Intelligence.logNetworkRequest(

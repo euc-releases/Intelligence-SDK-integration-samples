@@ -204,11 +204,11 @@ struct NetworkInsightsView: View {
 
     private var locationSection: some View {
         Section {
-            self.infoRow(
+            InfoRowView(
                 icon: "location.fill",
                 color: .teal,
                 title: "Location & Network Events",
-                body: "The SDK does not request location access itself. Provide the device's current coordinates here to associate geographic context with all subsequent network events reported to the Intelligence backend."
+                infoBody: "The SDK does not request location access itself. Provide the device's current coordinates here to associate geographic context with all subsequent network events reported to the Intelligence backend."
             )
 
             HStack {
@@ -244,7 +244,7 @@ struct NetworkInsightsView: View {
                 Double(self.longitudeText) == nil
             )
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 // WS1Intelligence.updateLocation(toLatitude:longitude:)
                 // Associates a lat/lon with all subsequent network events in this session.
                 // The SDK does not obtain location access itself; the app must supply it.
@@ -311,46 +311,6 @@ struct NetworkInsightsView: View {
         }
     }
 
-    /// A reusable info row with icon, title, and body text.
-    @ViewBuilder
-    func infoRow(icon: String, color: Color, title: String, body: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image(systemName: icon)
-                .foregroundStyle(color)
-                .font(.title3)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.headline)
-                Text(body)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.vertical, 4)
-    }
-
-    /// A monospaced code snippet block illustrating SDK API calls.
-    @ViewBuilder
-    func codeSnippetView(_ code: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 4) {
-                Image(systemName: "chevron.left.forwardslash.chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                Text("SDK calls")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
-            }
-            Text(code)
-                .font(.system(.caption2, design: .monospaced))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(10)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
-        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-    }
 }
 
 // MARK: - Preview

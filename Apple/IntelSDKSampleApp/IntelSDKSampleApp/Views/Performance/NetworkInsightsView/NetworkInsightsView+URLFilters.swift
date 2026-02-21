@@ -17,11 +17,11 @@ extension NetworkInsightsView {
 
     var urlFiltersSection: some View {
         Section {
-            self.infoRow(
+            InfoRowView(
                 icon: "nosign",
                 color: .red,
                 title: "URL Deny Filters",
-                body: "Any URL that contains the filter string (case-sensitive substring match) will not be reported to the Omnissa Intelligence backend at all. By default, query strings are stripped from all other reported URLs."
+                infoBody: "Any URL that contains the filter string (case-sensitive substring match) will not be reported to the Omnissa Intelligence backend at all. By default, query strings are stripped from all other reported URLs."
             )
 
             TextField("Filter token (e.g. \"analytics\")", text: self.$filterToken)
@@ -48,7 +48,7 @@ extension NetworkInsightsView {
             }
             .disabled(self.filterToken.trimmingCharacters(in: .whitespaces).isEmpty)
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 // WS1Intelligence.add(filter:)
                 // Appends a URL filter at runtime. Matching uses case-sensitive substring.
                 // Deny: URL is not reported to the Intelligence backend.
