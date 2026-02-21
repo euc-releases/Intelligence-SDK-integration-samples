@@ -19,12 +19,42 @@ struct TelemetryView: View {
     var body: some View {
         NavigationStack {
             if self.manager.isInitialized {
+                List {
+                    Section {
+                        NavigationLink {
+                            DEXOptInView()
+                        } label: {
+                            Label("DEX Opt-In", systemImage: "hand.raised")
+                        }
 
-                SDKFeatureComingSoonView(
-                    featureName: "Telemetry",
-                    featureDescription: "DEX opt-in controls, privacy configuration, and telemetry data export.",
-                    systemImage: "antenna.radiowaves.left.and.right"
-                )
+                        NavigationLink {
+                            SDKFeatureComingSoonView(
+                                featureName: "Privacy Configuration",
+                                featureDescription: "Visual JSON builder for privacy configuration with DEXData, BatteryData, DeviceData, and NetworkData controls.",
+                                systemImage: "lock.shield"
+                            )
+                        } label: {
+                            Label("Privacy Configuration", systemImage: "lock.shield")
+                        }
+
+                        NavigationLink {
+                            SDKFeatureComingSoonView(
+                                featureName: "Telemetry Export",
+                                featureDescription: "Export telemetry data by type, format, and category.",
+                                systemImage: "square.and.arrow.up"
+                            )
+                        } label: {
+                            Label("Telemetry Export", systemImage: "square.and.arrow.up")
+                        }
+                    } header: {
+                        SectionHeaderView(
+                            title: "Telemetry Features",
+                            systemImage: "antenna.radiowaves.left.and.right",
+                            description: "DEX opt-in controls, privacy configuration, and telemetry data export."
+                        )
+                    }
+                }
+                .listStyle(.insetGrouped)
                 .navigationTitle("Telemetry")
             } else {
                 SDKNotInitializedView()
