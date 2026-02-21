@@ -28,17 +28,11 @@ struct PerformanceView: View {
                             Label("User Flows", systemImage: "arrow.trianglehead.2.clockwise.rotate.90")
                         }
 
-                        NavigationLink(destination: {
-                            SDKFeatureComingSoonView(
-                                featureName: "Network Insights",
-                                featureDescription: "Automatic and manual network request monitoring (APM).",
-                                systemImage: "network"
-                            )
-                            .navigationTitle("Network Insights")
-                            .navigationBarTitleDisplayMode(.inline)
-                        }, label: {
+                        NavigationLink {
+                            NetworkInsightsView()
+                        } label: {
                             Label("Network Insights", systemImage: "network")
-                        })
+                        }
                     } header: {
                         SectionHeaderView(
                             title: "Performance Features",

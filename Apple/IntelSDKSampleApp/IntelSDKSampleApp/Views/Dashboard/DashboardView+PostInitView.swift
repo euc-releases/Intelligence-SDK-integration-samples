@@ -29,7 +29,7 @@ extension DashboardView {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("Telemetry Opt-In Required")
                         .font(.headline)
-                    Text("Enabling the SDK starts the runtime but does not collect or upload any telemetry. Application, DEX, and ZeroTrust data collection each require an explicit opt-in. Configure opt-in status in the **Telemetry** tab.")
+                    Text("Enabling the SDK starts the runtime and opts-into Application by default. DEX data collection requires an explicit opt-in. Configure opt-in status in the **Telemetry** tab.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
