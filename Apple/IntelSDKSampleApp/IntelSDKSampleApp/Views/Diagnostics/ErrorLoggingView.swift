@@ -169,14 +169,14 @@ struct ErrorLoggingView: View {
             }
             .disabled(!self.isNSErrorInputValid)
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 let error = NSError(
                     domain: "com.example.app",
                     code: 42,
                     userInfo: [NSLocalizedDescriptionKey: "Something went wrong."]
                 )
                 WS1Intelligence.logError(error)
-                """)
+                """, label: "SDK call")
 
         } header: {
             SectionHeaderView(
@@ -231,14 +231,14 @@ struct ErrorLoggingView: View {
             }
             .disabled(!self.isNSErrorInputValid || self.stacktraceText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 let frames = [
                     "0  MyApp  MyViewController.loadData() + 128",
                     "1  MyApp  MyViewController.viewDidLoad() + 64",
                     "2  UIKitCore  UIViewController.loadViewIfRequired() + 172"
                 ]
                 WS1Intelligence.logError(error, stacktrace: frames)
-                """)
+                """, label: "SDK call")
 
         } header: {
             SectionHeaderView(
@@ -289,14 +289,14 @@ struct ErrorLoggingView: View {
             }
             .disabled(self.exceptionName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 let exception = NSException(
                     name: NSExceptionName("NSGenericException"),
                     reason: "A handled exception occurred.",
                     userInfo: nil
                 )
                 WS1Intelligence.logHandledException(exception)
-                """)
+                """, label: "SDK call")
 
         } header: {
             SectionHeaderView(
@@ -473,27 +473,6 @@ struct ErrorLoggingView: View {
         }
     }
 
-    /// A monospaced code snippet block used inline within sections to illustrate the API call.
-    @ViewBuilder
-    private func codeSnippetView(_ code: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 4) {
-                Image(systemName: "chevron.left.forwardslash.chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                Text("SDK call")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
-            }
-            Text(code)
-                .font(.system(.caption2, design: .monospaced))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(10)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
-        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-    }
 }
 
 // MARK: - Preview

@@ -145,32 +145,32 @@ struct UserFlowsView: View {
 
     private var behavioralInfoSection: some View {
         Section {
-            self.infoRow(
+            InfoRowView(
                 icon: "timer",
                 color: .blue,
                 title: "Automatic App Load Time",
-                body: "App load time is automatically tracked as a user flow by the SDK. You do not need to begin or end it yourself."
+                infoBody: "App load time is automatically tracked as a user flow by the SDK. You do not need to begin or end it yourself."
             )
 
-            self.infoRow(
+            InfoRowView(
                 icon: "exclamationmark.triangle.fill",
                 color: .red,
                 title: "Crash Behavior",
-                body: "If a crash occurs, all in-progress user flows are automatically marked as crashed and reported with the crash."
+                infoBody: "If a crash occurs, all in-progress user flows are automatically marked as crashed and reported with the crash."
             )
 
-            self.infoRow(
+            InfoRowView(
                 icon: "arrow.trianglehead.2.clockwise.rotate.90",
                 color: .orange,
                 title: "One Flow Per Name",
-                body: "Only one user flow per name can be active at a time. Beginning a flow with an already-active name cancels the first one."
+                infoBody: "Only one user flow per name can be active at a time. Beginning a flow with an already-active name cancels the first one."
             )
 
-            self.infoRow(
+            InfoRowView(
                 icon: "minus.circle",
                 color: .secondary,
                 title: "Cancelled Flows Are Not Reported",
-                body: "Cancelled user flows are treated as if they never existed — they do not appear on the Omnissa Intelligence portal."
+                infoBody: "Cancelled user flows are treated as if they never existed — they do not appear on the Omnissa Intelligence portal."
             )
         } header: {
             SectionHeaderView(
@@ -212,7 +212,7 @@ struct UserFlowsView: View {
             }
             .disabled(self.customFlowName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
 
-            self.codeSnippetView("""
+            CodeSnippetView(code: """
                 // Without timeout
                 WS1Intelligence.beginUserFlow("Login")
 
@@ -318,46 +318,6 @@ struct UserFlowsView: View {
         }
     }
 
-    /// A monospaced code snippet block used inline within sections to illustrate SDK API calls.
-    @ViewBuilder
-    private func codeSnippetView(_ code: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack(spacing: 4) {
-                Image(systemName: "chevron.left.forwardslash.chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                Text("SDK calls")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
-            }
-            Text(code)
-                .font(.system(.caption2, design: .monospaced))
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(10)
-        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
-        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-    }
-
-    /// A reusable info row with icon, title, and body text.
-    @ViewBuilder
-    private func infoRow(icon: String, color: Color, title: String, body: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image(systemName: icon)
-                .foregroundStyle(color)
-                .font(.title3)
-                .frame(width: 24)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.headline)
-                Text(body)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.vertical, 4)
-    }
 }
 
 // MARK: - Preview
