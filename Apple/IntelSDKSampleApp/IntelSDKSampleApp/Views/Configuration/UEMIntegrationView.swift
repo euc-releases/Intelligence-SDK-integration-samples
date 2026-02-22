@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import WS1IntelligenceSDK
 
 // MARK: - Constants
 
@@ -33,14 +34,56 @@ private enum UEMIntegrationConstants {
 struct UEMIntegrationView: View {
 
     @Environment(IntelSDKManager.self) private var manager
+    @State private var toastMessage: String?
+    @State private var usernameInput: String = ""
 
     var body: some View {
         Form {
+            self.sdkUsernameSection
             self.uemDelegateSection
             self.integrationSnippetSection
         }
         .navigationTitle("UEM Integration")
         .navigationBarTitleDisplayMode(.inline)
+        .toast(message: self.$toastMessage, duration: 2)
+    }
+
+    // MARK: - Section: SDK Username (Feature 11)
+
+    private var sdkUsernameSection: some View {
+        Section {
+            HStack(spacing: 8) {
+                TextField("Enter username", text: self.$usernameInput)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                Button("Set Username") {
+                    self.setUsername()
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(self.usernameInput.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        } header: {
+            SectionHeaderView(
+                title: "SDK Username",
+                systemImage: "person.crop.circle",
+                description: "Sets the username associated with the device UUID for telemetry. Mutable anytime post-init."
+            )
+        }
+    }
+
+    private func setUsername() {
+        let username = self.usernameInput.trimmingCharacters(in: .whitespaces)
+        guard !username.isEmpty else {
+            return
+        }
+
+        // WS1Intelligence.setUsername(_:)
+        // Sets a relationship between the provided username string and the IntelSDK UUID.
+        // Used for user identification in crash reports, user flows, and other app level telemetry.
+        // Mutable anytime post-init. Call after enable() to associate a user with the device.
+        WS1Intelligence.setUsername(username)
+
+        self.toastMessage = "Username set to \(username) ✓"
     }
 
     // MARK: - Section: UEM Delegate Values (Read-Only)

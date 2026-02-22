@@ -82,7 +82,7 @@ struct ManualLogEntry: Identifiable {
 /// - Dynamic URL filter management to suppress specific endpoints from reporting
 /// - Location update to associate geographic context with network events
 struct NetworkInsightsView: View {
-    @Environment(IntelSDKManager.self) private var manager
+    @Environment(IntelSDKManager.self) var manager
 
     // MARK: - Automatic Capture State
 
@@ -112,6 +112,11 @@ struct NetworkInsightsView: View {
     @State private var latitudeText: String = "37.7749"
     @State private var longitudeText: String = "-122.4194"
 
+    // MARK: - Web View Demo State
+
+    @State var webViewURLString: String = "https://yahoo.com"
+    @State var webViewDisplayURL: URL?
+
     // MARK: - Toast
 
     @State var toastMessage: String?
@@ -123,6 +128,7 @@ struct NetworkInsightsView: View {
     var body: some View {
         Form {
             self.apmConfigSection
+            self.webViewDemoSection
             self.automaticCaptureSection
             self.manualLoggingSection
             self.urlFiltersSection
