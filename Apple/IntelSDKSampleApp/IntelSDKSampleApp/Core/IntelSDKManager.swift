@@ -9,18 +9,6 @@
 import Foundation
 import WS1IntelligenceSDK
 
-// MARK: - UEM Data Provider
-
-// UEMDataProvider is a lightweight NSObject conforming to WS1UEMDataDelegate.
-// It bridges the app's UEM attribute fields (serial number, device UDID, username)
-// into the SDK's delegate protocol, which requires an NSObject subclass.
-// The manager retains a strong reference to prevent premature deallocation.
-//
-private final class UEMDataProvider: NSObject, WS1UEMDataDelegate {
-    var serialNumber: String?
-    var deviceUDID: String?
-    var username: String?
-}
 
 // MARK: - IntelSDKManager
 
@@ -31,8 +19,7 @@ private final class UEMDataProvider: NSObject, WS1UEMDataDelegate {
 /// Injected into the SwiftUI environment from the app entry point so every view can read the same shared instance.
 ///
 @Observable
-final class IntelSDKManager {
-
+final class IntelSDKManager: WS1UEMDataDelegate {
     // MARK: Pre-Init Configuration Mirrors
     // These properties mirror the fields of WS1Config. They are editable on the Dashboard
     // before the SDK is initialized. Once enableSDK() is called, WS1Config is frozen and
@@ -137,10 +124,6 @@ final class IntelSDKManager {
     var loggingLevel: WS1IntelligenceLoggingLevel = .warning
 
     // MARK: Private
-
-    // Strong reference to the UEM delegate provider. Must outlive the enable() call
-    // because the SDK holds a weak reference to the delegate internally.
-    private var _uemProvider: UEMDataProvider?
 
     // Retained token for the WS1NotificationDidCrashOnLastLoad observer.
     // Registered in init() — before enableSDK() is called — so the notification cannot
@@ -261,13 +244,8 @@ final class IntelSDKManager {
         // Must be called BEFORE enable(). In production, implement this delegate in the component
         // that reads NSUserDefaults ManagedAppConfig keys populated by the UEM SDK.
         // Constraint: the delegate object must stay alive for the duration of the session;
-        // the SDK holds a weak reference internally, so we retain it in _uemProvider.
-        let provider = UEMDataProvider()
-        provider.serialNumber = self.uemSerialNumber
-        provider.deviceUDID = self.uemDeviceUDID
-        provider.username = self.uemUsername
-        self._uemProvider = provider
-        WS1Intelligence.setUEMProviderDelegate(provider)
+        // the SDK holds a weak reference internally.
+        WS1Intelligence.setUEMProviderDelegate(self)
 
         // WS1Intelligence.enable(withAppID:config:)
         // Initializes the SDK for this app session. This is a one-time, irreversible call —
@@ -323,5 +301,20 @@ final class IntelSDKManager {
         // settings that can be changed after enable() without restarting the app.
         // The new level takes effect immediately for all subsequent SDK log output.
         WS1Intelligence.setLoggingLevel(self.loggingLevel)
+    }
+}
+
+extension IntelSDKManager {
+
+    var serialNumber: String? {
+        return self.uemSerialNumber
+    }
+
+    var deviceUDID: String? {
+        return self.uemDeviceUDID
+    }
+
+    var username: String? {
+        return self.uemUsername
     }
 }
