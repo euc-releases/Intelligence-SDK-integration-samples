@@ -249,7 +249,7 @@ extension UserFlowsView {
         if let idx = self.flows.firstIndex(where: { $0.id == flow.id }) {
             self.flows[idx].breadcrumbs.append(crumb)
         }
-        self.presentToast("Breadcrumb logged for \"\(flow.name)\"")
+        self.toastMessage = "Breadcrumb logged for \"\(flow.name)\""
     }
 }
 

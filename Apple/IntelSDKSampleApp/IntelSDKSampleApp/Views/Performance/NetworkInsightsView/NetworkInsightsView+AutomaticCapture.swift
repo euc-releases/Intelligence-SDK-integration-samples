@@ -146,7 +146,7 @@ extension NetworkInsightsView {
 
             DispatchQueue.main.async {
                 self.sampleResults.append(result)
-                self.presentToast("Request captured by SDK automatically ✓")
+                self.toastMessage = "Request captured by SDK automatically ✓"
 
                 if slotKey == "success" {
                     self.isFiringSuccess = false

@@ -167,7 +167,7 @@ extension NetworkInsightsView {
             loggedAt: Date()
         )
         self.manualLog.append(entry)
-        self.presentToast("Network request logged manually ✓")
+        self.toastMessage = "Network request logged manually ✓"
     }
 
     /// Displays a manually logged request entry.
