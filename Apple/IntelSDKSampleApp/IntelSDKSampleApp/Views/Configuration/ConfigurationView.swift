@@ -10,7 +10,7 @@ import SwiftUI
 
 /// Top-level container for the Configuration tab.
 ///
-/// Hosts UEM Integration, Custom Settings, and Logging & Utility Settings sub-features
+/// Hosts UEM Integration and Custom Settings sub-features.
 /// Shows a "not initialized" gate screen when the SDK has not yet been enabled.
 struct ConfigurationView: View {
 
@@ -19,12 +19,28 @@ struct ConfigurationView: View {
     var body: some View {
         NavigationStack {
             if self.manager.isInitialized {
+                List {
+                    Section {
+                        NavigationLink {
+                            UEMIntegrationView()
+                        } label: {
+                            Label("UEM Integration", systemImage: "building.2")
+                        }
 
-                SDKFeatureComingSoonView(
-                    featureName: "Configuration",
-                    featureDescription: "UEM integration, custom SDK settings, and logging utility controls.",
-                    systemImage: "gearshape.2"
-                )
+                        NavigationLink {
+                            CustomSettingsView()
+                        } label: {
+                            Label("Custom Settings", systemImage: "slider.horizontal.3")
+                        }
+                    } header: {
+                        SectionHeaderView(
+                            title: "Configuration",
+                            systemImage: "gearshape.2",
+                            description: "UEM delegate values, custom SDK settings, and allowed apps."
+                        )
+                    }
+                }
+                .listStyle(.insetGrouped)
                 .navigationTitle("Configuration")
             } else {
                 SDKNotInitializedView()
