@@ -93,8 +93,7 @@ struct ErrorLoggingView: View {
 
     // MARK: UI state
     @State private var history: [LoggedItem] = []
-    @State private var toastMessage: String = ""
-    @State private var showToast: Bool = false
+    @State private var toastMessage: String?
 
     var body: some View {
         Form {
@@ -115,18 +114,7 @@ struct ErrorLoggingView: View {
                 }
             }
         }
-        .overlay(alignment: .bottom) {
-            if self.showToast {
-                Text(self.toastMessage)
-                    .font(.subheadline.weight(.medium))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .padding(.bottom, 24)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: self.showToast)
+        .toast(message: self.$toastMessage, duration: 1.5)
     }
 
     // MARK: - Section 1: Log NSError
@@ -408,7 +396,7 @@ struct ErrorLoggingView: View {
 
         let summary = "[\(domain) \(self.resolvedCode)] \(description)"
         self.history.append(LoggedItem(kind: .nsError, summary: summary, timestamp: Date()))
-        self.presentToast("NSError logged")
+        self.toastMessage = "NSError logged"
     }
 
     /// Calls `WS1Intelligence.logError(_:stacktrace:)` with the current inputs and custom frames.
@@ -437,7 +425,7 @@ struct ErrorLoggingView: View {
 
         let summary = "[\(domain) \(self.resolvedCode)] \(description) (\(frames.count) frames)"
         self.history.append(LoggedItem(kind: .nsErrorStacktrace, summary: summary, timestamp: Date()))
-        self.presentToast("NSError with stacktrace logged")
+        self.toastMessage = "NSError with stacktrace logged"
     }
 
     /// Calls `WS1Intelligence.logHandledException(_:)` with the current exception inputs.
@@ -461,16 +449,7 @@ struct ErrorLoggingView: View {
 
         let summary = "\(name): \(reason.isEmpty ? "(no reason)" : reason)"
         self.history.append(LoggedItem(kind: .nsException, summary: summary, timestamp: Date()))
-        self.presentToast("Handled exception logged")
-    }
-
-    /// Displays a bottom toast message for 1.5 seconds.
-    private func presentToast(_ message: String) {
-        self.toastMessage = message
-        self.showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.showToast = false
-        }
+        self.toastMessage = "Handled exception logged"
     }
 
 }

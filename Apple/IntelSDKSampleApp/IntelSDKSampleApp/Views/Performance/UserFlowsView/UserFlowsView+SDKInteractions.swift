@@ -25,7 +25,7 @@ extension UserFlowsView {
         }
 
         guard !self.flows.contains(where: { $0.name == name && $0.status == .running }) else {
-            self.presentToast("Flow with name: \(name) is already running!")
+            self.toastMessage = "Flow with name: \(name) is already running!"
             return
         }
 
@@ -58,7 +58,7 @@ extension UserFlowsView {
         let entry = UserFlowEntry(name: trimmed, status: .running, startedAt: Date(), timeout: timeout)
         self.flows.append(entry)
         self.breadcrumbInputs[entry.id] = ""
-        self.presentToast("Flow \"\(trimmed)\" started")
+        self.toastMessage = "Flow \"\(trimmed)\" started"
     }
 
     /// Ends a user flow successfully and updates the local entry.
@@ -71,7 +71,7 @@ extension UserFlowsView {
         // Calling endUserFlow on a name that is not currently active is a no-op.
         WS1Intelligence.endUserFlow(flow.name)
         self.completeFlow(id: flow.id, status: .ended)
-        self.presentToast("Flow \"\(flow.name)\" ended")
+        self.toastMessage = "Flow \"\(flow.name)\" ended"
     }
 
     /// Marks a user flow as failed and updates the local entry.
@@ -86,7 +86,7 @@ extension UserFlowsView {
         // Calling failUserFlow on a name that is not currently active is a no-op.
         WS1Intelligence.failUserFlow(flow.name)
         self.completeFlow(id: flow.id, status: .failed)
-        self.presentToast("Flow \"\(flow.name)\" marked as failed")
+        self.toastMessage = "Flow \"\(flow.name)\" marked as failed"
     }
 
     /// Cancels a user flow (it will not appear on the portal) and removes the local entry from active state.
@@ -100,7 +100,7 @@ extension UserFlowsView {
         // Calling cancelUserFlow on a name that is not currently active is a no-op.
         WS1Intelligence.cancelUserFlow(flow.name)
         self.completeFlow(id: flow.id, status: .cancelled)
-        self.presentToast("Flow \"\(flow.name)\" cancelled")
+        self.toastMessage = "Flow \"\(flow.name)\" cancelled"
     }
 
     func timeoutFlow(_ flow: UserFlowEntry) {

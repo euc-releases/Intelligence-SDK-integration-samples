@@ -114,8 +114,7 @@ struct NetworkInsightsView: View {
 
     // MARK: - Toast
 
-    @State private var toastMessage: String = ""
-    @State private var showToast: Bool = false
+    @State var toastMessage: String?
 
     let httpMethods = ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"]
 
@@ -142,18 +141,7 @@ struct NetworkInsightsView: View {
                 }
             }
         }
-        .overlay(alignment: .bottom) {
-            if self.showToast {
-                Text(self.toastMessage)
-                    .font(.subheadline.weight(.medium))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .padding(.bottom, 24)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: self.showToast)
+        .toast(message: self.$toastMessage, duration: 2)
     }
 
     // MARK: - Section: APM Configuration (Pre-Init, Read-Only)
@@ -279,17 +267,7 @@ struct NetworkInsightsView: View {
         // location-aware analysis and geographic filtering on the portal.
         // Introduced in SDK v5.9.3.
         WS1Intelligence.updateLocation(toLatitude: lat, longitude: lon)
-        self.presentToast(String(format: "Location updated (%.4f, %.4f) ✓", lat, lon))
-    }
-
-    // MARK: - Presentation Helpers
-
-    func presentToast(_ message: String) {
-        self.toastMessage = message
-        self.showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.showToast = false
-        }
+        self.toastMessage = String(format: "Location updated (%.4f, %.4f) ✓", lat, lon)
     }
 
     // MARK: - Reusable Sub-Views

@@ -96,8 +96,7 @@ struct UserFlowsView: View {
     @State var flows: [UserFlowEntry] = []
 
     // MARK: Toast state
-    @State private var toastMessage: String = ""
-    @State private var showToast: Bool = false
+    @State var toastMessage: String?
 
     static let presetFlowNames: [String] = [
         "Login Flow",
@@ -127,18 +126,7 @@ struct UserFlowsView: View {
                 }
             }
         }
-        .overlay(alignment: .bottom) {
-            if self.showToast {
-                Text(self.toastMessage)
-                    .font(.subheadline.weight(.medium))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .padding(.bottom, 24)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: self.showToast)
+        .toast(message: self.$toastMessage, duration: 1.5)
     }
 
     // MARK: - Section: Behavioral Info Callouts
@@ -308,15 +296,6 @@ struct UserFlowsView: View {
     }
 
     // MARK: - Private Helpers
-
-    /// Shows a bottom toast message for 1.5 seconds.
-    func presentToast(_ message: String) {
-        self.toastMessage = message
-        self.showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.showToast = false
-        }
-    }
 
 }
 

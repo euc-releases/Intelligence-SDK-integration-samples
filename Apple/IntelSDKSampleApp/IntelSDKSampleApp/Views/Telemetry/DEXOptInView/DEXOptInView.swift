@@ -21,8 +21,7 @@ struct DEXOptInView: View {
 
     // MARK: - Toast State
 
-    @State private var toastMessage: String = ""
-    @State private var showToast: Bool = false
+    @State private var toastMessage: String?
 
     // MARK: - Opt-In State (mirrors SDK; refreshed on appear and after each toggle)
 
@@ -43,18 +42,7 @@ struct DEXOptInView: View {
         }
         .navigationTitle("DEX Opt-In")
         .navigationBarTitleDisplayMode(.inline)
-        .overlay(alignment: .bottom) {
-            if self.showToast {
-                Text(self.toastMessage)
-                    .font(.subheadline.weight(.medium))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .padding(.bottom, 24)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: self.showToast)
+        .toast(message: self.$toastMessage, duration: 2)
         .onAppear {
             self.refreshOptInState()
         }
@@ -249,7 +237,7 @@ struct DEXOptInView: View {
 
         let typeLabel = self.label(for: type)
         let statusLabel = value ? "enabled" : "disabled"
-        self.presentToast("\(typeLabel) \(statusLabel) ✓")
+        self.toastMessage = "\(typeLabel) \(statusLabel) ✓"
     }
 
     /// Human-readable label for telemetry type.
@@ -260,16 +248,6 @@ struct DEXOptInView: View {
         case .zeroTrust: return "ZeroTrust"
         case .allAdvancedTelemetry: return "All Advanced Telemetry"
         @unknown default: return "Unknown"
-        }
-    }
-
-    // MARK: - Presentation Helpers
-
-    private func presentToast(_ message: String) {
-        self.toastMessage = message
-        self.showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.showToast = false
         }
     }
 

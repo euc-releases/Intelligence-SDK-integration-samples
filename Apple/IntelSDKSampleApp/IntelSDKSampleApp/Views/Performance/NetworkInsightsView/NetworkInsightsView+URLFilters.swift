@@ -132,6 +132,6 @@ extension NetworkInsightsView {
 
         self.filters.append(FilterEntry(token: token, type: self.filterType, addedAt: Date()))
         self.filterToken = ""
-        self.presentToast("Filter \"\(token)\" added ✓")
+        self.toastMessage = "Filter \"\(token)\" added ✓"
     }
 }

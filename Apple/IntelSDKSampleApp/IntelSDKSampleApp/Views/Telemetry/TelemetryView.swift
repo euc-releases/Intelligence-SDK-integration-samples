@@ -28,11 +28,7 @@ struct TelemetryView: View {
                         }
 
                         NavigationLink {
-                            SDKFeatureComingSoonView(
-                                featureName: "Privacy Configuration",
-                                featureDescription: "Visual JSON builder for privacy configuration with DEXData, BatteryData, DeviceData, and NetworkData controls.",
-                                systemImage: "lock.shield"
-                            )
+                            PrivacyConfigView()
                         } label: {
                             Label("Privacy Configuration", systemImage: "lock.shield")
                         }

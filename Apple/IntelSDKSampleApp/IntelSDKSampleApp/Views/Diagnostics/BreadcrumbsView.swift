@@ -39,7 +39,7 @@ struct BreadcrumbsView: View {
     @State private var breadcrumbText: String = ""
     @State private var isAsyncMode: Bool = false
     @State private var history: [BreadcrumbEntry] = []
-    @State private var showConfirmation: Bool = false
+    @State private var toastMessage: String?
 
     private let maxLength = 140
     private static let quickActionLabels: [String] = [
@@ -69,18 +69,7 @@ struct BreadcrumbsView: View {
                 }
             }
         }
-        .overlay(alignment: .bottom) {
-            if self.showConfirmation {
-                Text("Breadcrumb logged")
-                    .font(.subheadline.weight(.medium))
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 10)
-                    .background(.ultraThinMaterial, in: Capsule())
-                    .padding(.bottom, 24)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-            }
-        }
-        .animation(.easeInOut(duration: 0.3), value: self.showConfirmation)
+        .toast(message: self.$toastMessage, duration: 1.5)
     }
 
     // MARK: - Leave a Breadcrumb Section
@@ -266,15 +255,7 @@ struct BreadcrumbsView: View {
         WS1Intelligence.leaveBreadcrumb(trimmed)
 
         self.history.append(BreadcrumbEntry(text: trimmed, timestamp: Date()))
-        self.showToast()
-    }
-
-    /// Shows the "Breadcrumb logged" toast for 1.5 seconds.
-    private func showToast() {
-        self.showConfirmation = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.showConfirmation = false
-        }
+        self.toastMessage = "Breadcrumb logged"
     }
 }
 
