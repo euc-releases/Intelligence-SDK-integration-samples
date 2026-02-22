@@ -34,11 +34,7 @@ struct TelemetryView: View {
                         }
 
                         NavigationLink {
-                            SDKFeatureComingSoonView(
-                                featureName: "Telemetry Export",
-                                featureDescription: "Export telemetry data by type, format, and category.",
-                                systemImage: "square.and.arrow.up"
-                            )
+                            TelemetryExportView()
                         } label: {
                             Label("Telemetry Export", systemImage: "square.and.arrow.up")
                         }
