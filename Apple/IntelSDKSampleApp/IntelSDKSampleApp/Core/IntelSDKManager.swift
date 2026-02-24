@@ -19,7 +19,7 @@ import WS1IntelligenceSDK
 /// Injected into the SwiftUI environment from the app entry point so every view can read the same shared instance.
 ///
 @Observable
-final class IntelSDKManager: WS1UEMDataDelegate {
+final class IntelSDKManager: WS1IntelligenceSDK.WS1UEMDataDelegate {
     // MARK: Pre-Init Configuration Mirrors
     // These properties mirror the fields of WS1Config. They are editable on the Dashboard
     // before the SDK is initialized. Once enableSDK() is called, WS1Config is frozen and
@@ -238,6 +238,13 @@ final class IntelSDKManager: WS1UEMDataDelegate {
         if self.selectedEntitlementKeys.contains("multicast") { entitlements.append(.multicast()) }
         config.entitlements = entitlements
 
+        // WS1Intelligence.setLoggingLevel(_:)
+        // Controls the verbosity of the SDK's internal log output to Xcode console.
+        // Applied before enable() to match the default level stored in the manager.
+        // Can be changed again at any time post-init. Levels: .silent, .error, .warning,
+        // .info, .debug. Use .debug during development, .warning or .silent in production.
+        WS1Intelligence.setLoggingLevel(self.loggingLevel)
+
         // WS1Intelligence.setUEMProviderDelegate(_:)
         // Supplies UEM device attributes (serial number, device UDID, username) to the SDK so
         // that DEX telemetry can be correlated with the device record in the UEM console.
@@ -281,21 +288,11 @@ final class IntelSDKManager: WS1UEMDataDelegate {
         // any first-launch crash recovery logic in a real app.
         self.crashedOnLastLoad = WS1Intelligence.didCrashOnLastLoad()
 
-        // WS1Intelligence.setLoggingLevel(_:)
-        // Controls the verbosity of the SDK's internal log output to Xcode console.
-        // Applied immediately after enable() to match the default level stored in the manager.
-        // Can be changed again at any time post-init. Levels: .silent, .error, .warning,
-        // .info, .debug. Use .debug during development, .warning or .silent in production.
-        WS1Intelligence.setLoggingLevel(self.loggingLevel)
-
         return nil
     }
 
     /// Updates the SDK logging level to the current value of `loggingLevel`.
-    /// Safe to call any time after `isInitialized` is true.
     func applyLoggingLevel() {
-        guard self.isInitialized else { return }
-
         // WS1Intelligence.setLoggingLevel(_:)
         // Updates the SDK's internal log verbosity at runtime. This is one of the few SDK
         // settings that can be changed after enable() without restarting the app.
@@ -306,15 +303,15 @@ final class IntelSDKManager: WS1UEMDataDelegate {
 
 extension IntelSDKManager {
 
-    var serialNumber: String? {
+    @objc var serialNumber: String? {
         return self.uemSerialNumber
     }
 
-    var deviceUDID: String? {
+    @objc var deviceUDID: String? {
         return self.uemDeviceUDID
     }
 
-    var username: String? {
+    @objc var username: String? {
         return self.uemUsername
     }
 }

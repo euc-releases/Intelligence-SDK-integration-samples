@@ -70,6 +70,7 @@ struct DashboardView: View {
             self.appIDSection
             self.networkMonitoringSection
             self.dataCrashConfigSection
+            self.loggingLevelSection
             self.dexEntitlementsSection
             self.uemDelegateSection
             self.enableSection
