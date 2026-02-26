@@ -107,9 +107,16 @@ extension UserFlowsView {
             }
             .padding(.vertical, 4)
             .onAppear {
-                if let timeout = flow.timeout {
+                let userFlow = flow // capture flow for async block
+
+                if let timeout = userFlow.timeout {
                     DispatchQueue.main.asyncAfter(deadline: .now() + timeout) {
-                        self.timeoutFlow(flow)
+
+                        guard self.isFlowActive(name: userFlow.name) else {
+                            return
+                        }
+
+                        self.timeoutFlow(userFlow)
                     }
                 }
             }

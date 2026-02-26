@@ -102,8 +102,12 @@ extension NetworkInsightsView {
         guard !trimmed.isEmpty else { 
             return nil 
         }
-        
-        return URL(string: trimmed)
+
+        guard let url = URL(string: trimmed), let scheme = url.scheme, scheme == "https" else {
+            return nil
+        }
+
+        return url
     }
 
     private func loadWebViewURL() {

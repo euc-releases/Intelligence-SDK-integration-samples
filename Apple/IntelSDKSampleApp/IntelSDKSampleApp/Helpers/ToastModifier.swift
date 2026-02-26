@@ -32,8 +32,13 @@ struct ToastModifier: ViewModifier {
             }
             .animation(.easeInOut(duration: 0.3), value: self.message)
             .task(id: self.message) {
-                guard self.message != nil else { return }
+                guard self.message != nil else {
+                    return
+                }
+
                 try? await Task.sleep(nanoseconds: UInt64(self.duration * 1_000_000_000))
+                self.message = nil
+            }.onDisappear {
                 self.message = nil
             }
     }

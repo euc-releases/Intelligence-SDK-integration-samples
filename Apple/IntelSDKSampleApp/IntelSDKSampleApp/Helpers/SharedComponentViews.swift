@@ -70,6 +70,6 @@ struct CodeSnippetView: View {
         InfoRowView(icon: "wifi", color: .blue, title: "Auto-capture enabled",
                     infoBody: "All NSURLSession traffic is automatically captured by the SDK.")
         CodeSnippetView(code: "WS1Intelligence.leaveBreadcrumb(\"user tapped checkout\")")
-        CodeSnippetView(code: "WS1Intelligence.logError(error)", label: "SDK call")
+        CodeSnippetView(code: "WS1Intelligence.logError(error)", label: "SDK calls")
     }
 }

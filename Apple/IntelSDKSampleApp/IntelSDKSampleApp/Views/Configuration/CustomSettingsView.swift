@@ -310,11 +310,9 @@ struct CustomSettingsView: View {
     private func applySettings() {
         // Validate: if user entered custom JSON, it must be parseable
         let trimmed = self.customSettingsJSON.trimmingCharacters(in: .whitespaces)
-        if !trimmed.isEmpty {
-            guard let data = trimmed.data(using: .utf8), (try? JSONSerialization.jsonObject(with: data)) != nil else {
-                self.showInvalidJSONAlert = true
-                return
-            }
+        if !trimmed.isEmpty, let data = trimmed.data(using: .utf8), (try? JSONSerialization.jsonObject(with: data)) == nil {
+            self.showInvalidJSONAlert = true
+            return
         }
 
         let json = self.builtConfigJSON

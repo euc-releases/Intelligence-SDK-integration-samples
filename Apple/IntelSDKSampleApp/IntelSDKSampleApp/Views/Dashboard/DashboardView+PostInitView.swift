@@ -18,9 +18,8 @@ extension DashboardView {
 
     var optInCalloutSection: some View {
         Section {
-            // No telemetry type is opted-in by default after enable().
-            // Application, DEX, and ZeroTrust data collection each require an
-            // explicit opt-in via setOptInStatus(for:andStatus:) before any
+            // Application opted-in by default after enable().
+            // DEX and ZeroTrust data collection each require an explicit opt-in via setOptInStatus(for:andStatus:) before any
             // data is sent to the Intelligence backend.
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "info.circle.fill")
