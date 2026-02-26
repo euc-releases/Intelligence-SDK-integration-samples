@@ -54,7 +54,7 @@ extension NetworkInsightsView {
                 // Deny: URL is not reported to the Intelligence backend.
                 // Preserve*: keeps the specified URL component that is otherwise stripped.
                 WS1Intelligence.add(filter: WS1Filter(string: "analytics",
-                                                      filterType: .Deny))
+                                                      filterType: .deny))
                 """)
 
             if self.filters.isEmpty {
@@ -118,11 +118,11 @@ extension NetworkInsightsView {
         // Filters use case-sensitive substring matching against the full URL string.
         //
         // Filter types:
-        //   .Deny               — URLs containing the token are NOT reported to the Intelligence backend.
-        //   .PreserveQuery      — keeps the ?key=value query string (stripped by default).
-        //   .PreserveFragment   — keeps the #fragment identifier (stripped by default).
-        //   .PreserveParameters — keeps URL path parameters (stripped by default).
-        //   .PreserveAll        — keeps query, fragment, and parameters.
+        //   .deny               — URLs containing the token are NOT reported to the Intelligence backend.
+        //   .preserveQuery      — keeps the ?key=value query string (stripped by default).
+        //   .preserveFragment   — keeps the #fragment identifier (stripped by default).
+        //   .preserveParameters — keeps URL path parameters (stripped by default).
+        //   .preserveAll        — keeps query, fragment, and parameters.
         //
         // Note: filters are additive and cannot be removed once applied for the current session.
         // Constraint: can be called at any time after enable() — unlike urlFilters on WS1Config,
