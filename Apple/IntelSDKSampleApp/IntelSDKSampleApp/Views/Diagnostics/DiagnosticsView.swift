@@ -39,11 +39,17 @@ struct DiagnosticsView: View {
                         } label: {
                             Label("Error & Exception Logging", systemImage: "xmark.octagon")
                         }
+
+                        NavigationLink {
+                            TelemetryStatusReportView()
+                        } label: {
+                            Label("DEX Telemetry Status Report", systemImage: "doc.text.magnifyingglass")
+                        }
                     } header: {
                         SectionHeaderView(
                             title: "Diagnostics Features",
                             systemImage: "cross.case",
-                            description: "Crash reporting, breadcrumbs, and error & exception logging."
+                            description: "Crash reporting, breadcrumbs, error logging, and DEX Telemetry Status Report (26.2.0+)."
                         )
                     }
                 }
