@@ -235,6 +235,12 @@ extension DashboardView {
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
             }
+            LabeledContent("UEM device UUID") {
+                TextField("intelsdk_device_uuid", text: $mgr.uemDeviceUUID)
+                    .multilineTextAlignment(.trailing)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
+            }
             LabeledContent("Username") {
                 TextField("Optional", text: $mgr.uemUsername)
                     .multilineTextAlignment(.trailing)
@@ -248,7 +254,7 @@ extension DashboardView {
                 description: "Publish UEM device attributes to the Intelligence backend for device identity enrichment."
             )
         } footer: {
-            Text("In a UEM-managed deployment, these values come from NSUserDefaults ManagedAppConfig keys. The delegate MUST be set before enabling the SDK — it cannot be changed after initialization.")
+            Text("In a UEM-managed deployment, read from Managed App Configuration (e.g. com.apple.configuration.managed) using WS1UEMAttributeKeys. For Intelligence 26.2.0+, map the intelsdk_device_uuid key (UEM value such as {DeviceUuId}) into the UEM device UUID field for unauthenticated device correlation. The delegate MUST be set before enabling the SDK — it cannot be changed after initialization.")
                 .font(.caption)
         }
     }

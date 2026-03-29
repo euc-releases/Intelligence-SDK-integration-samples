@@ -16,9 +16,15 @@ private enum UEMIntegrationConstants {
     // Before WS1Intelligence.enable():
     WS1Intelligence.setUEMProviderDelegate(self)
 
-    // In production, 
-    // -> read from ManagedAppConfig via UEM SDK NSUserDefaults keyed by WS1UEMAttributeKeys.
-    // -> read the profiles from Custom UEM SDK settings (if integrated) like below - 
+    // Intelligence SDK 26.2.0+: WS1UEMDataDelegate includes deviceUUID (UEM global device ID).
+    // UEM Application Configuration key: intelsdk_device_uuid (e.g. value {DeviceUuId}).
+    // Swift: managedAppConfig[WS1UEMAttributeKeys.intelSDKDeviceUUID()]
+
+    // If you use both WS1SDK (AirWatch) and Intelligence SDK, WS1SDK 26.02.0+ is required.
+
+    // In production,
+    // -> read from ManagedAppConfig via NSUserDefaults keyed by WS1UEMAttributeKeys.
+    // -> read profiles from Custom UEM SDK settings (if integrated), e.g.:
     // receivedProfiles: (NSArray *) profiles {
     //   AWCustomPayload *custom = profiles.firstObject.customPayload
     //   NSString *settings = custom.settings
@@ -92,6 +98,7 @@ struct UEMIntegrationView: View {
         Section {
             self.readOnlyRow(label: "Serial Number", value: self.manager.uemSerialNumber)
             self.readOnlyRow(label: "Device UDID", value: self.manager.uemDeviceUDID)
+            self.readOnlyRow(label: "UEM device UUID", value: self.manager.uemDeviceUUID)
             self.readOnlyRow(label: "Username", value: self.manager.uemUsername)
 
             HStack(alignment: .top, spacing: 10) {

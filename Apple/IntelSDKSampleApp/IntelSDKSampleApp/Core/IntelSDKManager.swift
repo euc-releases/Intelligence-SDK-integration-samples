@@ -81,12 +81,17 @@ final class IntelSDKManager: WS1IntelligenceSDK.WS1UEMDataDelegate {
     // MARK: UEM Delegate Fields (Pre-Init)
     // These values populate the WS1UEMDataDelegate before enableSDK() is called.
     // -> These details can be populated post `enableSDK()` as well but the delegate should be registered pre-enableSDK()
-    // They publish device-level UEM attributes (serial number, UDID, username) to the
-    // Intelligence backend for enriched device identity. In a real UEM-managed deployment
-    // these would come from NSUserDefaults/ManagedAppConfig; here they are entered manually.
+    // They publish device-level UEM attributes to the Intelligence backend. In a real UEM-managed deployment
+    // these would come from Managed App Configuration (`com.apple.configuration.managed`); here they are entered manually.
+    //
+    // `deviceUUID` (26.2.0+): Workspace ONE UEM global device identifier from the `intelsdk_device_uuid` KVP
+    // (e.g. EMM Managed Access value `{DeviceUuId}`). Used in unauthenticated Intelligence mode to associate
+    // telemetry with the UEM device record. Read in production with `WS1UEMAttributeKeys.intelSDKDeviceUUID()`.
 
     var uemSerialNumber: String = ""
     var uemDeviceUDID: String = ""
+    /// UEM global device UUID (`intelsdk_device_uuid`); distinct from `deviceUDID`.
+    var uemDeviceUUID: String = ""
     var uemUsername: String = ""
 
     // MARK: Post-Init Runtime State
@@ -246,7 +251,7 @@ final class IntelSDKManager: WS1IntelligenceSDK.WS1UEMDataDelegate {
         WS1Intelligence.setLoggingLevel(self.loggingLevel)
 
         // WS1Intelligence.setUEMProviderDelegate(_:)
-        // Supplies UEM device attributes (serial number, device UDID, username) to the SDK so
+        // Supplies UEM device attributes (serial number, device UDID, device UUID, username) to the SDK so
         // that DEX telemetry can be correlated with the device record in the UEM console.
         // Must be called BEFORE enable(). In production, implement this delegate in the component
         // that reads NSUserDefaults ManagedAppConfig keys populated by the UEM SDK.
@@ -309,6 +314,10 @@ extension IntelSDKManager {
 
     @objc var deviceUDID: String? {
         return self.uemDeviceUDID
+    }
+
+    @objc var deviceUUID: String? {
+        return self.uemDeviceUUID
     }
 
     @objc var username: String? {
