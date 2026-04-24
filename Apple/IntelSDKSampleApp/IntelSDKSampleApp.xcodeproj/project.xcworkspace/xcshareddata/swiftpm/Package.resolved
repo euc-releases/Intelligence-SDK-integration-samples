@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/euc-releases/ws1-intelligencesdk-sdk-ios",
       "state" : {
-        "revision" : "08be2155192578cdcb79d17188863316a4707c07",
-        "version" : "26.2.0"
+        "revision" : "2fea0a342094283796199532ea2d70d8336b554d",
+        "version" : "26.2.1"
       }
     }
   ],
