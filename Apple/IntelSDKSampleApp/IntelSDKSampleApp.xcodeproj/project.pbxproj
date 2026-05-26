@@ -360,7 +360,7 @@
 			repositoryURL = "https://github.com/euc-releases/ws1-intelligencesdk-sdk-ios";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 26.2.0;
+				minimumVersion = 26.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
